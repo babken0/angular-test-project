@@ -1,0 +1,29 @@
+<div class="btn-container">
+  <div class="left-side-btns">
+    <button>
+      <span class="button-text">Добавить</span>
+      <span class="button-icon"><mat-icon>add_circle_outline</mat-icon></span>
+    </button>
+    <button (click)="unlock()">
+      <span class="button-text">Разблокировать</span>
+      <span class="button-icon"><mat-icon>check_circle_outline</mat-icon></span>
+    </button>
+    <button (click)="block()">
+      <span class="button-text">Заблокировать</span>
+      <span class="button-icon"><mat-icon fontSet="material-icons-outlined">cancel</mat-icon></span>
+    </button>
+  </div>
+
+  <div class="right-side-btns">
+    <button (click)="isOpened = !isOpened">
+      <span class="button-icon"><mat-icon>filter_list</mat-icon></span>
+      <span class="button-text">Фильтр</span>
+    </button>
+  </div>
+
+</div>
+
+
+<app-user-filter *ngIf="isOpened" (filter)="getFilterData($event)"></app-user-filter>
+<app-user-list [filterData]= "filterData"></app-user-list>
+

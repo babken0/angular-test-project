@@ -1,0 +1,114 @@
+.filter-container{
+  box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12);
+  margin: 20px 0;
+  border-radius: 10px;
+  padding: 20px 30px;
+}
+
+.form-container{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.input-box,.close-icon,.example-full-width {
+  position: relative;
+  padding: 10px;
+}
+
+.example-full-width {
+  display: flex;
+  box-sizing: border-box;
+  flex-direction: column;
+  min-width: 300px;
+    //margin-top: 50px
+}
+.input-box {
+  width: 80%;
+  border: 1px solid #ccc;
+  outline: 0;
+  border-radius: 15px;
+  margin-top: 10px;
+  &:focus {
+    box-shadow: 0 0 15px 5px #b0e0ee;
+    border: 2px solid #bebede;
+  }
+}
+
+.close-icon {
+  border:1px solid transparent;
+  background-color: transparent;
+  display: inline-block;
+  vertical-align: middle;
+  outline: 0;
+  cursor: pointer;
+  &:after {
+    content: "X";
+    display: block;
+    width: 15px;
+    height: 15px;
+    position: absolute;
+    background-color: #A2A9B1;
+    z-index:1;
+    right: 35px;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    padding: 2px;
+    border-radius: 50%;
+    text-align: center;
+    color: white;
+    font-weight: normal;
+    font-size: 12px;
+    cursor: pointer;
+  }
+}
+
+.cross-validation-error  {
+  & input{
+    border-color: #DA2032;
+  }
+  &.close-icon {
+    border: 1px solid black;
+    &:after{
+      background-color: #DA2032;
+    }
+  }
+}
+
+.alert-danger{
+  color: #DA2032;
+}
+
+.form-btns{
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  box-sizing: border-box;
+  & button{
+    border: none;
+    padding: 10px 50px;
+    background-color: #F0F1F1;
+    color: #969CA2;
+    font-weight: 600;
+    margin: 0 15px 10px 0;
+    border-radius: 10px;
+    min-width: 180px;
+    &:first-child{
+      background-color: #DA2032;
+      color: white;
+    }
+    &:hover{
+      box-shadow: 0 0 10px 3px #b0e0ee;
+      border: 2px solid #bebede;
+    }
+
+  }
+}
+
+.disabled {
+    border: 1px solid #999999;
+    background-color: #cccccc;
+    color: #666666;
+
+}

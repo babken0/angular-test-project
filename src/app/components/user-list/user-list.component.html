@@ -1,0 +1,226 @@
+<div class="example-container mat-elevation-z8">
+  <div class="paginator-container">
+    <mat-paginator #paginator
+                   [pageSize]="10"
+                   [pageSizeOptions]="[1,5, 10, 20]">
+    </mat-paginator>
+    <div class="selected-items-count">Количество выбранных записей: {{numSelected}}</div>
+  </div>
+
+  <div class="sort-container">
+    <label for="status">Сортировать по</label>
+    <div>
+      <select id="status" class="select-box" (change)= "sortByColumn()">
+        <option value="login"><span>Логину</span></option>
+        <option value="create_at"><span>Дата создания</span></option>
+        <option value="update_at"><span>Дата изменения</span></option>
+        <option value="email"><span>E-mail</span></option>
+        <option value="phone"><span>Телефон</span></option>
+        <option value="role"><span>Роли</span></option>
+        <option value="status"><span>Статус</span></option>
+        <option value="isEcp"><span>Налиные ЭП</span></option>
+      </select>
+    </div>
+  </div>
+<!--  <div class="example-table-container">-->
+
+<!--    <mat-table [dataSource]="this.dataSource" matSort (matSortChange)="announceSortChange($event)">-->
+<!--      &lt;!&ndash; Symbol Column &ndash;&gt;-->
+<!--      <ng-container matColumnDef="action" class="mat-column-action">-->
+<!--        <mat-header-cell *matHeaderCellDef>Действие</mat-header-cell>-->
+<!--        <mat-cell *matCellDef="let row">-->
+<!--          <button mat-icon-button [matMenuTriggerFor]="menu">-->
+<!--            <mat-icon>more_vert</mat-icon>-->
+<!--          </button>-->
+<!--        </mat-cell>-->
+<!--      </ng-container>-->
+
+<!--      &lt;!&ndash; Checkbox Column &ndash;&gt;-->
+<!--      <ng-container matColumnDef="user.name">-->
+<!--        <mat-header-cell *matHeaderCellDef mat-sort-header>-->
+<!--          <mat-checkbox (change)="$event ? masterToggle() : null"-->
+<!--                        [checked]="selection.hasValue() && isAllSelected()"-->
+<!--                        [indeterminate]="selection.hasValue() && !isAllSelected()">-->
+<!--          </mat-checkbox>-->
+<!--          <span>Логин</span>-->
+<!--        </mat-header-cell>-->
+<!--        <mat-cell *matCellDef="let row">-->
+<!--          <mat-checkbox (click)="$event.stopImmediatePropagation()"-->
+<!--                        (change)="$event ? selection.toggle(row) : null"-->
+<!--                        [checked]="selection.isSelected(row)">-->
+<!--          </mat-checkbox>-->
+<!--          <span>{{row.user.name}}</span>-->
+<!--        </mat-cell>-->
+<!--      </ng-container>-->
+
+<!--      <ng-container matColumnDef="user.email">-->
+<!--        <mat-header-cell *matHeaderCellDef mat-sort-header>E-mail</mat-header-cell>-->
+<!--        <mat-cell *matCellDef="let row">{{ row.user.email }}</mat-cell>-->
+<!--      </ng-container>-->
+
+<!--      <ng-container matColumnDef="phone">-->
+<!--        <mat-header-cell *matHeaderCellDef mat-sort-header>Телефон</mat-header-cell>-->
+<!--        <mat-cell *matCellDef="let row">{{ row.user.phone | phone}}</mat-cell>-->
+<!--      </ng-container>-->
+
+<!--      <ng-container matColumnDef="role">-->
+<!--        <mat-header-cell *matHeaderCellDef mat-sort-header>Роли</mat-header-cell>-->
+<!--        <mat-cell *matCellDef="let row">{{ row.is_admin ? "Администратор" : "Пользователь" }}</mat-cell>-->
+<!--      </ng-container>-->
+
+<!--      <ng-container matColumnDef="update_at">-->
+<!--        <mat-header-cell *matHeaderCellDef mat-sort-header>Дата изменения</mat-header-cell>-->
+<!--        <mat-cell *matCellDef="let row">{{ row.user.update_at  |  date:"dd/MM/yyyy" }}</mat-cell>-->
+<!--      </ng-container>-->
+
+<!--      <ng-container matColumnDef="create_at">-->
+<!--        <mat-header-cell *matHeaderCellDef mat-sort-header>Дата создания</mat-header-cell>-->
+<!--        <mat-cell *matCellDef="let row">{{ row.user.create_at  |  date:"dd/MM/yyyy" }}</mat-cell>-->
+<!--      </ng-container>-->
+
+<!--      <ng-container matColumnDef="status">-->
+<!--        <mat-header-cell *matHeaderCellDef mat-sort-header>Статус</mat-header-cell>-->
+<!--        <mat-cell *matCellDef="let row"-->
+<!--                  [ngClass]="{-->
+<!--            'green' : row.status.toLowerCase()=='active',-->
+<!--            'red' : row.status.toLowerCase()=='banned'-->
+<!--         }">-->
+<!--          {{ row.status.toLowerCase() == 'active' ? "Активен" : "Заблокирован"}}-->
+<!--        </mat-cell>-->
+<!--      </ng-container>-->
+
+<!--      <ng-container matColumnDef="isEcp">-->
+<!--        <mat-header-cell *matHeaderCellDef mat-sort-header>Налиные ЭП</mat-header-cell>-->
+<!--        <mat-cell *matCellDef="let row"-->
+<!--                  [ngClass]="row.is_ecp?'green':'red'">-->
+<!--          <mat-icon *ngIf="!row.is_ecp">cancel</mat-icon>-->
+<!--          <mat-icon *ngIf="row.is_ecp">check_circle</mat-icon>-->
+<!--        </mat-cell>-->
+<!--      </ng-container>-->
+
+<!--      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>-->
+<!--      <mat-row *matRowDef="let row; columns: displayedColumns;" class="mat-row">-->
+<!--      </mat-row>-->
+<!--    </mat-table>-->
+
+<!--  </div>-->
+
+<!--  <div class="cards-container">-->
+<!--    <table *ngFor="let row of users$ | async" class="card-table">-->
+<!--      <tr class="card-row">-->
+<!--        <td>Действие</td>-->
+<!--        <td>-->
+<!--          <button mat-icon-button [matMenuTriggerFor]="menu">-->
+<!--            <mat-icon>more_vert</mat-icon>-->
+<!--          </button>-->
+<!--        </td>-->
+<!--      </tr>-->
+<!--      <tr class="card-row">-->
+<!--        <td>-->
+<!--          <mat-checkbox (change)="$event ? masterToggle() : null"-->
+<!--                        [checked]="selection.hasValue() && isAllSelected()"-->
+<!--                        [indeterminate]="selection.hasValue() && !isAllSelected()">-->
+<!--          </mat-checkbox>-->
+<!--          <span>Логин</span>-->
+<!--        </td>-->
+<!--        <td>-->
+<!--          <mat-checkbox (click)="$event.stopImmediatePropagation()"-->
+<!--                        (change)="$event ? selection.toggle(row) : null"-->
+<!--                        [checked]="selection.isSelected(row)">-->
+<!--          </mat-checkbox>-->
+<!--          <span>{{row.user?.name}}</span>-->
+<!--        </td>-->
+<!--      </tr>-->
+<!--      <tr class="card-row">-->
+<!--        <td>E-mail</td>-->
+<!--        <td>{{row.user?.email}}</td>-->
+<!--      </tr>-->
+<!--      <tr class="card-row">-->
+<!--        <td>Телефон</td>-->
+<!--        <td>{{ row.user?.phone + "" | phone}}</td>-->
+<!--      </tr>-->
+<!--      <tr class="card-row">-->
+<!--        <td>Роли</td>-->
+<!--        <td>{{ row?.is_admin ? "Администратор" : "Пользователь" }}</td>-->
+<!--      </tr>-->
+<!--      <tr class="card-row">-->
+<!--        <td>Дата изменения</td>-->
+<!--        <td>{{ row?.user?.update_at  |  date:"dd/MM/yyyy" }}</td>-->
+<!--      </tr>-->
+<!--      <tr class="card-row">-->
+<!--        <td>Дата создания</td>-->
+<!--        <td>{{ row?.user?.create_at  |  date:"dd/MM/yyyy" }}</td>-->
+<!--      </tr>-->
+<!--      <tr class="card-row">-->
+<!--        <td>Статус</td>-->
+<!--        <td [ngClass]="{-->
+<!--            'green' : row.status.toLowerCase()=='active',-->
+<!--            'red' : row.status.toLowerCase()=='banned'-->
+<!--         }">-->
+<!--          {{ row?.status?.toLowerCase() == 'active' ? "Активен" : "Заблокирован"}}-->
+<!--        </td>-->
+<!--      </tr>-->
+<!--      <tr class="card-row">-->
+<!--        <td>Налиные ЭП</td>-->
+<!--        <td [ngClass]="row.is_ecp?'green':'red'">-->
+<!--          <mat-icon *ngIf="!row.is_ecp">cancel</mat-icon>-->
+<!--          <mat-icon *ngIf="row.is_ecp">check_circle</mat-icon>-->
+<!--        </td>-->
+<!--      </tr>-->
+
+<!--    </table>-->
+
+    <table mat-table matSort [dataSource]="dataSource" style="color: #24292e">
+
+      <!-- Position Column -->
+      <ng-container matColumnDef="is_admin">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Admin </th>
+        <td mat-cell *matCellDef="let element"> {{element.is_admin}} </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="create_at" >
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Created at </th>
+        <td mat-cell *matCellDef="let element"> {{element.create_at}} </td>
+      </ng-container>
+
+      <!-- Weight Column -->
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+        <td mat-cell *matCellDef="let element"> {{element["status"]}} </td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="isEcp" >
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Ecp </th>
+        <td mat-cell *matCellDef="let element" (click)="print(element)"> {{element.is_admin}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+<!--  </div>-->
+
+  <div class="paginator-container">
+    <mat-paginator (page)="syncPrimaryPaginator($event)"
+                   [pageSize]="paginator.pageSize" [pageIndex]="paginator.pageIndex"
+                   [length]="paginator.length" [pageSizeOptions]="paginator.pageSizeOptions"></mat-paginator>
+    <div class="selected-items-count">Количество выбранных записей: {{numSelected}}</div>
+  </div>
+
+</div>
+<mat-menu #menu="matMenu">
+  <button mat-menu-item>
+    <mat-icon>open_in_new</mat-icon>
+    <span>Open risk plan</span>
+  </button>
+  <button mat-menu-item>
+    <mat-icon>undo</mat-icon>
+    <span>Reset questionnaire</span>
+  </button>
+  <button mat-menu-item disabled>
+    <mat-icon>delete</mat-icon>
+    <span>Delete questionnaire</span>
+  </button>
+</mat-menu>

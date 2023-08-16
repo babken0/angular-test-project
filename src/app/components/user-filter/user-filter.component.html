@@ -1,0 +1,94 @@
+<div class="filter-container">
+  <form [formGroup]="filterForm" (ngSubmit)="onSubmit()" xmlns="http://www.w3.org/1999/html">
+    <div class="form-container">
+      <div class="example-full-width"
+           [class.cross-validation-error]="filterForm.controls.login.errors && (filterForm.touched || filterForm.dirty)">
+        <label for="login">Логин</label>
+        <div>
+          <input id="login" class="input-box" formControlName="login">
+          <button *ngIf="filterForm.controls.login.value" class="close-icon"
+                  (click)="filterForm.controls.login.setValue('')"></button>
+        </div>
+        <div *ngIf="login.invalid && (login.dirty || login.touched)"
+             class="alert alert-danger">
+          <div *ngIf="login.errors?.['minlength']">
+            Имя должно быть не менее 2 символов.
+          </div>
+          <div *ngIf="login.errors?.['pattern']">
+            Недопустимые символы
+          </div>
+        </div>
+      </div>
+
+      <div class="example-full-width">
+        <label for="phone">Телефон</label>
+        <div>
+          <input id="phone" class="input-box" formControlName="phone" mask="+0(000) 000-00-00">
+          <button *ngIf="filterForm.controls.phone.value" class="close-icon"
+                  (click)="filterForm.controls.phone.setValue('')"></button>
+        </div>
+      </div>
+
+      <div class="example-full-width">
+        <label for="create_at">Дата создания</label>
+        <div>
+          <input id="create_at" type="date" class="input-box" formControlName="create_at">
+          <button *ngIf="filterForm.controls.create_at.value" class="close-icon"
+                  (click)="filterForm.controls.create_at.setValue('')"></button>
+        </div>
+      </div>
+      <div class="example-full-width">
+        <label for="status">Статус</label>
+        <div class="select-box">
+          <select id="status" class="input-box" formControlName="status">
+            <option value="ACTIVE"><span>Активен</span></option>
+            <option value="BANNED"><span>Заблокирован</span></option>
+          </select>
+        </div>
+      </div>
+      <div class="example-full-width">
+        <label for="email">E-mail</label>
+        <div>
+          <input id="email" type="input" class="input-box" formControlName="email">
+          <button *ngIf="filterForm.controls.email.value" class="close-icon"
+                  (click)="filterForm.controls.email.setValue('')"></button>
+        </div>
+        <div *ngIf="email.invalid && (email.dirty || email.touched)"
+             class="alert alert-danger">
+          <div *ngIf="email.errors?.['minlength']">
+            Для поиска длина должно быть не менее 4 символов.
+          </div>
+          <div *ngIf="email.errors?.['pattern']">
+            Недопустимые символы
+          </div>
+        </div>
+      </div>
+      <div class="example-full-width">
+        <label for="is_admin">Роль</label>
+        <div>
+          <select id="is_admin" class="input-box" formControlName="is_admin">
+            <option value="1"><span>Администратор</span></option>
+            <option value="0"><span>Пользователь</span></option>
+          </select>
+        </div>
+      </div>
+      <div class="example-full-width">
+        <label for="update_at">Дата изменения</label>
+        <div>
+          <input id="update_at" type="date" class="input-box" formControlName="update_at">
+          <button *ngIf="filterForm.controls.update_at.value" class="close-icon"
+                  (click)="filterForm.controls.update_at.setValue('')"></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-btns">
+      <button [ngClass]="{'disabled' : filterForm.invalid}" type="submit" (click)="onSubmit()"
+              [disabled]="filterForm.invalid">Применить
+      </button>
+      <button (click)="cancel()">Отмена</button>
+      <button (click)="reset()">Зброс</button>
+    </div>
+
+  </form>
+</div>

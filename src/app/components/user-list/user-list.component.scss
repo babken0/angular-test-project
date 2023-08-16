@@ -1,0 +1,162 @@
+mat-table {
+  width: 100%;
+}
+
+.mat-elevation-z8 {
+  border-radius: 10px;
+}
+
+.mat-column-action {
+  width: 20px;
+  padding-right: 8px !important;
+}
+
+.paginator-container{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.sort-container{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 10px;
+  & .select-box {
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    outline: 0;
+    border-radius: 15px;
+    margin: 10px 0 0 10px ;
+    &:focus {
+      box-shadow: 0 0 15px 5px #b0e0ee;
+      border: 2px solid #bebede;
+    }
+  }
+}
+
+
+mat-button-toggle{
+  border-style: none !important;
+}
+
+mat-row {
+  &:hover {
+    background-color: #e9f3ff;
+  }
+  a {
+    color: #3e75ff;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+mat-header-row {
+  background-color: #DA2032;
+}
+.mdc-data-table__header-cell {
+  color: white;
+}
+
+mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+.cards-container {
+  display: none;
+}
+@media screen and (max-width: 960px) {
+  .mat-elevation-z8 {
+    background: transparent;
+    box-shadow: none;
+  }
+
+  mat-header-row {
+    display: none;
+  }
+  mat-table{
+    display: none;
+  }
+
+  .cards-container {
+    display: block;
+  }
+
+  .card-table{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+  }
+  .card-row{
+    display: flex;
+    box-sizing: border-box;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 0 20px;
+
+    min-height: 40px;
+  }
+
+  .card-table tr:nth-child(2n) {
+    border-right: none;
+  }
+  .card-table tr:nth-child(2n+1) {
+    border-left: none;
+  }
+
+  .card-table tr {
+    width: 50%;
+    border:1px solid #DADADA;
+    border-collapse: collapse;
+  }
+
+  .card-table td {
+    width: 50%;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .card-table tr {
+    width: 100%;
+    border:none;
+  }
+
+  .card-table td {
+    border:1px solid #DADADA;
+  }
+
+  .card-table td:nth-child(2n) {
+    border-right: none;
+  }
+
+  .card-table td:nth-child(2n+1) {
+    border-left: none;
+  }
+
+  }
+
+mat-paginator {
+  margin-left: 30px;
+  display: flex;
+  justify-content: space-between;
+}
+.green {
+  color: #25B553;
+}
+
+.red{
+  color: #FF001F;
+}
+
+.selected-items-count {
+  margin:5px
+}
+
+
