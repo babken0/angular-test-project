@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {MatPaginatorIntl} from "@angular/material/paginator";
 import {Subject} from "rxjs";
 
@@ -6,8 +6,6 @@ import {Subject} from "rxjs";
 export class CustomPaginatorIntl implements MatPaginatorIntl {
   changes = new Subject<void>();
 
-  // For internationalization, the `$localize` function from
-  // the `@angular/localize` package can be used.
   itemsPerPageLabel = `Элементов на странице:`;
   firstPageLabel = `First page`;
   lastPageLabel = `Last page`;

@@ -1,0 +1,8 @@
+version: '1'
+services:
+  angular:
+    image: angular-project-angular
+    build: .
+    ports:
+      - "4200:80"
+

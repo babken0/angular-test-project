@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, Input, OnChanges, OnDestroy, SimpleChanges, ViewChild} from '@angular/core';
 import {UserService} from "../../core/services/user.service";
-import {BehaviorSubject, catchError, of, startWith, Subject, switchMap, takeUntil} from "rxjs";
+import {catchError, of, startWith, Subject, switchMap, takeUntil} from "rxjs";
 import {SelectionModel} from '@angular/cdk/collections';
 import {map} from 'rxjs/operators';
 import {merge} from 'rxjs/internal/observable/merge';
@@ -9,7 +9,7 @@ import {CustomPaginatorIntl} from "../../core/services/custom-paginator-intl.ser
 import {FilterModel} from "../../core/models/filter.model";
 
 import {MatPaginator, MatPaginatorIntl, PageEvent} from '@angular/material/paginator';
-import {MatSort, Sort} from '@angular/material/sort';
+import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 
 @Component({
@@ -21,9 +21,8 @@ import {MatTableDataSource} from '@angular/material/table';
 export class UserListComponent implements OnChanges, AfterViewInit, OnDestroy {
   @Input() filterData!: FilterModel;
 
-  public users$?: BehaviorSubject<IUserInfo[]>;
-  // public displayedColumns = ["action", 'user.name', 'user.email', 'phone', 'role', 'update_at', 'create_at', 'status', 'isEcp'];
-  public displayedColumns = [  'is_admin', 'status', 'isEcp'];
+  public users: IUserInfo[] = [];
+  public displayedColumns = ["action", 'name', 'email', 'phone', 'is_admin', 'update_at', 'create_at', 'status', 'is_ecp'];
   public dataSource = new MatTableDataSource<any>();
 
   public selection = new SelectionModel<IUserInfo>(true, []);
@@ -33,7 +32,7 @@ export class UserListComponent implements OnChanges, AfterViewInit, OnDestroy {
   public isLoadingResults = true;
   public isRateLimitReached = false;
   @ViewChild(MatPaginator) public paginator!: MatPaginator;
-  @ViewChild(MatSort, { static: true }) sort!: MatSort;
+  @ViewChild(MatSort, {static: true}) sort!: MatSort;
   private _unsubscribe$: Subject<void> = new Subject();
 
 
@@ -41,7 +40,7 @@ export class UserListComponent implements OnChanges, AfterViewInit, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    //this._getUsersDataWithFilter();
+    this._getUsersDataWithFilter();
 
   }
 
@@ -52,13 +51,6 @@ export class UserListComponent implements OnChanges, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    this.dataSource.sort = this.sort;
-    this._userService.getUsers().subscribe(
-      data =>   { this.dataSource  = new MatTableDataSource(data);
-        this.dataSource.sort = this.sort;}
-
-  )
-    this.dataSource.filter
     this._getUsersDataWithFilter();
   }
 
@@ -83,6 +75,7 @@ export class UserListComponent implements OnChanges, AfterViewInit, OnDestroy {
           user.status = 'BANNED'
         }
       });
+      this._userService.saveDataToLS(this.users);
       this.selection.clear()
     }
   }
@@ -94,68 +87,115 @@ export class UserListComponent implements OnChanges, AfterViewInit, OnDestroy {
           user.status = 'ACTIVE'
         }
       });
+      this._userService.saveDataToLS(this.users);
       this.selection.clear()
     }
   }
 
-  public  sortByColumn() {
-    if (this.dataSource && this.dataSource.sort){
-      this.dataSource.sort.active= 'phone';
+  public sortByColumn(columnName: string) {
+    if (this.dataSource && this.dataSource.sort) {
+      this.dataSource.sort.active = columnName;
+      this._getUsersDataWithFilter()
     }
   }
 
   private _getUsersDataWithFilter() {
-    // this.sort?.sortChange.subscribe(() => this.paginator.pageIndex = 0);
-    // if(this.sort && this.paginator) {
-    //
-    //   merge(this.sort?.sortChange, this.paginator?.page)
-    //     .pipe(
-    //       takeUntil(this._unsubscribe$),
-    //       startWith({}),
-    //       switchMap(() => {
-    //         this.isLoadingResults = true;
-    //         return this._userService!.getUsers();
-    //       }),
-    //       map((users: IUserInfo[]) => {
-    //         // Flip flag to show that loading has finished.
-    //         this.isLoadingResults = false;
-    //         this.isRateLimitReached = false;
-    //
-    //         return users.filter(user => this._isMatchesTheFilter(user));
-    //       }),
-    //       catchError((err) => {
-    //         this.isLoadingResults = false;
-    //         this.isRateLimitReached = true;
-    //         console.log(err)
-    //         return of([]);
-    //       })
-    //     ).subscribe((users: IUserInfo[]) => {
-    //     this.dataSource.data = users;
-    //     this.resultsLength = users.length;
-    //
-    //     this.users$ = this.dataSource.connect();
-    //   });
-    //
-    //   this.dataSource!.paginator = this.paginator;
-    //   // this.dataSource!.sort = this.sort;
-    // }
+    this.sort?.sortChange.pipe(takeUntil(this._unsubscribe$))
+      .subscribe(() => this.paginator.pageIndex = 0);
+
+    if (this.sort && this.paginator) {
+
+      merge(this.sort?.sortChange, this.paginator?.page)
+        .pipe(
+          takeUntil(this._unsubscribe$),
+          startWith({}),
+          switchMap(() => {
+            this.isLoadingResults = true;
+            return this._userService!.getUsers();
+          }),
+          map((users: IUserInfo[]) => {
+            // Flip flag to show that loading has finished.
+            this.isLoadingResults = false;
+            this.isRateLimitReached = false;
+
+            return users.filter(user => this._isMatchesTheFilter(user));
+          }),
+          catchError((err) => {
+            this.isLoadingResults = false;
+            this.isRateLimitReached = true;
+            console.log(err)
+            return of([]);
+          })
+        ).subscribe((users: IUserInfo[]) => {
+        this.dataSource.data = users;
+        this.users = users;
+        this.sortData();
+
+        this.resultsLength = users.length;
+
+      });
+      this.dataSource!.paginator = this.paginator;
+      this.dataSource!.sort = this.sort;
+    }
+  }
+
+  private sortData(): void {
+    let sortBy = this.sort?.active
+    let sortType = this.sort?.direction == "asc" ? 1 : -1 || 0;
+    switch (sortBy) {
+      case "name":
+        this.users = this.users?.sort((a, b) => {
+          return (a?.name?.localeCompare(b?.name || "") || 0) * sortType;
+        });
+        break;
+      case "email":
+        this.users = this.users?.sort((a, b) => {
+          return (a?.email?.localeCompare(b?.email || "") || 0) * sortType;
+        });
+        break;
+      case "status":
+        this.users = this.users?.sort((a, b) => {
+          return (a?.status?.localeCompare(b?.status || "") || 0) * sortType;
+        });
+        break;
+      case "update_at":
+        this.users = this.users
+          ?.sort((a, b) => (a.update_at || -1 - (b.update_at || -1)) * sortType);
+        break;
+      case "create_at":
+        this.users = this.users
+          ?.sort((a, b) => (a.create_at || -1 - (b.create_at || -1)) * sortType);
+        break;
+      case "is_ecp":
+        this.users = this.users
+          ?.sort((a, b) => ((a.is_ecp ? 1 : 0) - (b.is_ecp ? 1 : 0)) * sortType);
+        break;
+      case "is_admin":
+        this.users = this.users
+          ?.sort((a, b) => ((a.is_admin ? 1 : 0) - (b.is_admin ? 1 : 0)) * sortType);
+        break;
+      case "phone":
+        this.users = this.users
+          ?.sort((a, b) => ((a.phone || 0) - (b.phone || 0)) * sortType);
+        break;
+    }
   }
 
   private _isMatchesTheFilter(userInfo: IUserInfo): boolean {
     if (this.filterData) {
-      if (this.filterData.name && !userInfo.user?.name?.toLowerCase().includes(this.filterData.name.toLowerCase())) {
+      if (this.filterData.name && !userInfo?.name?.toLowerCase().includes(this.filterData.name.toLowerCase())) {
         return false
       }
-      if (this.filterData.phone && !userInfo.user?.phone?.toString().toLowerCase().includes(this.filterData.phone.toString().toLowerCase())) {
+      if (this.filterData.phone && !userInfo?.phone?.toString().toLowerCase().includes(this.filterData.phone.toString().toLowerCase())) {
         return false
       }
-      if (this.filterData.create_at && !(userInfo.user && new Date(new Date(userInfo.user.create_at).toJSON().slice(0, 10)).getTime() == this.filterData.create_at)) {
+      if (this.filterData.create_at && !(userInfo.create_at && new Date(new Date(userInfo.create_at).toJSON().slice(0, 10)).getTime() == this.filterData.create_at)) {
         return false
       }
-      if (this.filterData.update_at && !(userInfo.user && new Date(new Date(userInfo.user.update_at).toJSON().slice(0, 10)).getTime() == this.filterData.update_at)) {
+      if (this.filterData.update_at && !(userInfo.update_at && new Date(new Date(userInfo.update_at).toJSON().slice(0, 10)).getTime() == this.filterData.update_at)) {
         return false
       }
-      if (this.filterData.email && !userInfo.user?.email?.toLowerCase().includes(this.filterData.email.toLowerCase())) {
+      if (this.filterData.email && !userInfo.email?.toLowerCase().includes(this.filterData.email.toLowerCase())) {
         return false
       }
       if (this.filterData.status && !userInfo?.status?.toLowerCase().includes(this.filterData.status.toLowerCase())) {
@@ -169,18 +209,6 @@ export class UserListComponent implements OnChanges, AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     this._unsubscribe$.next();
     this._unsubscribe$.complete();
-  }
-
-  announceSortChange(sortState: Sort) {
-    if (sortState.direction) {
-      console.log(`Sorted ${sortState.direction}ending`);
-    } else {
-      console.log('Sorting cleared');
-    }
-  }
-
-  print(element: any) {
-    console.log(element)
   }
 }
 
